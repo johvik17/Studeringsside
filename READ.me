@@ -1,0 +1,20 @@
+Kjør og test
+
+Start DB:
+
+docker compose up -d
+
+Start app:
+
+./mvnw spring-boot:run
+
+Test health:
+
+curl http://localhost:8080/api/health
+
+Register:
+
+curl -X POST http://localhost:8080/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"johan@example.com","password":"SterktPassord123"}'
+

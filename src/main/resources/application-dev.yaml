@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studyops
+    username: studyops
+    password: studyops
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  flyway:
+    enabled: true
+
+app:
+  security:
+    jwt:
+      secret: "CHANGE_ME_TO_A_LONG_RANDOM_STRING_AT_LEAST_32_CHARS"
+      issuer: "studyops"
+

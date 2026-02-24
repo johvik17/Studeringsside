@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: studyops
+  profiles:
+    active: dev

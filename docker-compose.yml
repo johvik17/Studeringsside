@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: studyops-db
+    environment:
+      POSTGRES_DB: studyops
+      POSTGRES_USER: studyops
+      POSTGRES_PASSWORD: studyops
+    ports:
+      - "5432:5432"
+    volumes:
+      - studyops_pgdata:/var/lib/postgresql/data
+
+volumes:
+  studyops_pgdata:
