@@ -1,6 +1,7 @@
 package no.studyops.session.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,9 @@ public class StudySession {
 
     @Column(name="user_id", nullable = false)
     private Long userId;
+
+    @Column(name="course_id")
+    private UUID courseId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
@@ -36,11 +40,14 @@ public class StudySession {
         this.userId = userId;
         this.type = type;
         this.startTime = startTime;
+        this.endTime = null;
+        this.durationMinutes = null;
         this.notes = notes;
     }
 
     public Long getId() { return id; }
     public Long getUserId() { return userId; }
+    public UUID getCourseId() { return courseId; }
     public SessionType getType() { return type; }
     public Instant getStartTime() { return startTime; }
     public Instant getEndTime() { return endTime; }
@@ -52,5 +59,9 @@ public class StudySession {
     public void stop(Instant endTime, int durationMinutes) {
         this.endTime = endTime;
         this.durationMinutes = durationMinutes;
+    }
+
+    public void setCourseId(UUID courseId) {
+        this.courseId = courseId;
     }
 }

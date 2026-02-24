@@ -69,7 +69,7 @@
       <artifactId>flyway-database-postgresql</artifactId>
     </dependency>
 
-    <!-- Lombok (optional) -->
+    <!-- Lombok -->
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>

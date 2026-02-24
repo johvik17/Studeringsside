@@ -18,3 +18,15 @@ app:
       secret: "CHANGE_ME_TO_A_LONG_RANDOM_STRING_AT_LEAST_32_CHARS"
       issuer: "studyops"
 
+server:
+  error:
+    include-message: always
+    include-stacktrace: always
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+
