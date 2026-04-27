@@ -1,6 +1,7 @@
 package no.studyops.session.dto;
 
 import java.time.Instant;
+import java.util.UUID;
 import no.studyops.session.entity.SessionType;
 
 public record SessionResponse(
@@ -9,5 +10,6 @@ public record SessionResponse(
         Instant startTime,
         Instant endTime,
         Integer durationMinutes,
-        String notes
+        String notes,
+        UUID courseId
 ) {}

@@ -6,7 +6,20 @@ export type LoginResponse = {
   expiresInSeconds: number;
 };
 
+export type RegisterResponse = {
+  id: number;
+  email: string;
+};
+
 export type SessionType = "POMODORO" | "DEEP_WORK" | "READING" | "CODING";
+
+export type Course = {
+  id: string;
+  name: string;
+  code: string | null;
+  color: string | null;
+  createdAt: string;
+};
 
 export type Session = {
   id: number;
@@ -15,6 +28,7 @@ export type Session = {
   endTime: string | null;
   durationMinutes: number | null;
   notes: string | null;
+  courseId: string | null;
 };
 
 export type DailySummary = { date: string; minutes: number };
@@ -44,10 +58,25 @@ async function request<T>(
     throw new Error(`${res.status} ${res.statusText}: ${text}`);
   }
 
-  return (await res.json()) as T;
+  if (res.status === 204) {
+    return undefined as T;
+  }
+
+  const text = await res.text();
+  if (!text) {
+    return undefined as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 export const api = {
+  register: (email: string, password: string) =>
+    request<RegisterResponse>("/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+
   login: (email: string, password: string) =>
     request<LoginResponse>("/api/auth/login", {
       method: "POST",
@@ -56,11 +85,26 @@ export const api = {
 
   me: (token: string) => request<{ sub: string; uid: number; email: string }>("/api/me", { token }),
 
-  startSession: (token: string, type: SessionType, notes?: string) =>
+  listCourses: (token: string) => request<Course[]>("/api/courses", { token }),
+
+  createCourse: (token: string, name: string, code?: string, color?: string) =>
+    request<Course>("/api/courses", {
+      method: "POST",
+      token,
+      body: JSON.stringify({ name, code, color }),
+    }),
+
+  deleteCourse: (token: string, id: string) =>
+    request<void>(`/api/courses/${id}`, {
+      method: "DELETE",
+      token,
+    }),
+
+  startSession: (token: string, type: SessionType, notes?: string, courseId?: string | null) =>
     request<Session>("/api/sessions/start", {
       method: "POST",
       token,
-      body: JSON.stringify({ type, notes }),
+      body: JSON.stringify({ type, notes, courseId }),
     }),
 
   stopSession: (token: string, id: number) =>

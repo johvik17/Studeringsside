@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/studyops
+    url: jdbc:postgresql://localhost:5433/studyops
     username: studyops
     password: studyops
 

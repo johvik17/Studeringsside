@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.Comparator;
 import java.util.Map;
 
+import no.studyops.course.repository.CourseRepository;
 import no.studyops.session.dto.DailySummaryResponse;
 import no.studyops.session.dto.SessionResponse;
 import no.studyops.session.dto.StartSessionRequest;
@@ -23,9 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudySessionService {
 
     private final StudySessionRepository repo;
+    private final CourseRepository courseRepository;
 
-    public StudySessionService(StudySessionRepository repo) {
+    public StudySessionService(StudySessionRepository repo, CourseRepository courseRepository) {
         this.repo = repo;
+        this.courseRepository = courseRepository;
     }
 
     @Transactional
@@ -34,6 +37,11 @@ public class StudySessionService {
                 .ifPresent(active -> { throw new IllegalStateException("You already have an active session"); });
 
         StudySession session = repo.save(new StudySession(userId, req.type(), Instant.now(), req.notes()));
+        if (req.courseId() != null) {
+            courseRepository.findByIdAndUserId(req.courseId(), userId)
+                    .orElseThrow(() -> new IllegalArgumentException("Course not found"));
+            session.setCourseId(req.courseId());
+        }
         return toResponse(session);
     }
 
@@ -71,7 +79,8 @@ public class StudySessionService {
                 s.getStartTime(),
                 s.getEndTime(),
                 s.getDurationMinutes(),
-                s.getNotes()
+                s.getNotes(),
+                s.getCourseId()
         );
     }
 
